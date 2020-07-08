@@ -135,7 +135,7 @@ function Fundos(props) {
     <div className="book">
       <div className="book-tabs">
         <div className="tab">
-          <Link to="/personagens"><span>Sprite</span></Link> 
+          <Link to="/personagens"><span>Personagens</span></Link> 
              
           <InlineSVG src={tlogoUrl} alt="" />
         </div>

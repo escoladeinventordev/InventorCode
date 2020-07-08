@@ -137,7 +137,7 @@ function Personagens(props) {
     <div className="book">
       <div className="book-tabs">
         <div className="tab active">
-        <Link to="/personagens"><span>Sprite</span></Link>
+        <Link to="/personagens"><span>Personagens</span></Link>
           <InlineSVG src={tlogoUrl} alt="" />
         </div>
         <div className="tab">
