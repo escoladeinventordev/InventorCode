@@ -16,49 +16,62 @@ export { default as createProject } from './project.controller/createProject';
 
 export function updateProject(req, res) {
   Project.findById(req.params.project_id, (findProjectErr, project) => {
-    if (!project.user.equals(req.user._id)) {
-      res.status(403).send({ success: false, message: 'Session does not match owner of project.' });
-      return;
-    }
-    if (req.body.updatedAt && isAfter(new Date(project.updatedAt), req.body.updatedAt)) {
-      res.status(409).send({ success: false, message: 'Attempted to save stale version of project.' });
-      return;
-    }
-    Project.findByIdAndUpdate(
-      req.params.project_id,
-      {
-        $set: req.body
-      },
-      {
-        new: true
-      }
-    )
-      .populate('user', 'username')
-      .exec((updateProjectErr, updatedProject) => {
-        if (updateProjectErr) {
-          console.log(updateProjectErr);
-          res.json({ success: false });
+
+    User.findGuest((err,guest) => {
+
+      if(req.user){
+        if (!project.user.equals(req.user._id)) {
+          res.status(403).send({ success: false, message: 'Session does not match owner of project.' });
           return;
         }
-        if (req.body.files && updatedProject.files.length !== req.body.files.length) {
-          const oldFileIds = updatedProject.files.map(file => file.id);
-          const newFileIds = req.body.files.map(file => file.id);
-          const staleIds = oldFileIds.filter(id => newFileIds.indexOf(id) === -1);
-          staleIds.forEach((staleId) => {
-            updatedProject.files.id(staleId).remove();
-          });
-          updatedProject.save((innerErr, savedProject) => {
-            if (innerErr) {
-              console.log(innerErr);
-              res.json({ success: false });
-              return;
-            }
-            res.json(savedProject);
-          });
-        } else {
-          res.json(updatedProject);
+      }else{
+        if (!project.user.equals(guest._id)) {
+          res.status(403).send({ success: false, message: 'Unable to edit anonymous projects.' });
+          return;
         }
-      });
+      }
+
+      if (req.body.updatedAt && isAfter(new Date(project.updatedAt), req.body.updatedAt)) {
+        res.status(409).send({ success: false, message: 'Attempted to save stale version of project.' });
+        return;
+      }
+      Project.findByIdAndUpdate(
+        req.params.project_id,
+        {
+          $set: req.body
+        },
+        {
+          new: true
+        }
+      )
+        .populate('user', 'username')
+        .exec((updateProjectErr, updatedProject) => {
+          if (updateProjectErr) {
+            console.log(updateProjectErr);
+            res.json({ success: false });
+            return;
+          }
+          if (req.body.files && updatedProject.files.length !== req.body.files.length) {
+            const oldFileIds = updatedProject.files.map(file => file.id);
+            const newFileIds = req.body.files.map(file => file.id);
+            const staleIds = oldFileIds.filter(id => newFileIds.indexOf(id) === -1);
+            staleIds.forEach((staleId) => {
+              updatedProject.files.id(staleId).remove();
+            });
+            updatedProject.save((innerErr, savedProject) => {
+              if (innerErr) {
+                console.log(innerErr);
+                res.json({ success: false });
+                return;
+              }
+              res.json(savedProject);
+            });
+          } else {
+            res.json(updatedProject);
+          }
+        });
+    });
+
   });
 }
 

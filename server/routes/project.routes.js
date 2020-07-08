@@ -4,9 +4,9 @@ import isAuthenticated from '../utils/isAuthenticated';
 
 const router = new Router();
 
-router.post('/projects', isAuthenticated, ProjectController.createProject);
+router.post('/projects', ProjectController.createProject);
 
-router.put('/projects/:project_id', isAuthenticated, ProjectController.updateProject);
+router.put('/projects/:project_id', ProjectController.updateProject);
 
 router.get('/projects/:project_id', ProjectController.getProject);
 

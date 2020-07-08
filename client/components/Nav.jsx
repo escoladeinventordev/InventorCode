@@ -109,7 +109,8 @@ class Nav extends React.PureComponent {
     if (this.props.user.authenticated) {
       this.props.saveProject(this.props.cmController.getContent());
     } else {
-      this.props.showErrorModal('forceAuthentication');
+      //this.props.showErrorModal('forceAuthentication');
+      this.props.saveProject(this.props.cmController.getContent(),false,true);
     }
     this.setDropdown('none');
   }
@@ -181,8 +182,13 @@ class Nav extends React.PureComponent {
   }
 
   handleShare() {
-    this.props.showShareModal();
-    this.setDropdown('none');
+    if(!this.props.project.id){
+      let anonymous = this.props.user.authenticated ? false : true;
+      this.props.saveProject(this.props.cmController.getContent(),false,anonymous,true);
+    }else{
+      this.props.showShareModal();
+      this.setDropdown('none');
+    }
   }
 
   handleClickOutside() {
@@ -280,7 +286,7 @@ class Nav extends React.PureComponent {
                   Novo
                 </button>
               </li>
-              { __process.env.LOGIN_ENABLED && (!this.props.project.owner || this.isUserOwner()) &&
+              
               <li className="nav__dropdown-item">
                 <button
                   onClick={this.handleSave}
@@ -290,7 +296,7 @@ class Nav extends React.PureComponent {
                   Salvar
                   <span className="nav__keyboard-shortcut">{metaKeyName}+s</span>
                 </button>
-              </li> }
+              </li>
               { this.props.project.id && this.props.user.authenticated &&
               <li className="nav__dropdown-dn">
                 <button
@@ -301,7 +307,9 @@ class Nav extends React.PureComponent {
                   Duplicar
                 </button>
               </li> }
+
              {/** { this.props.project.id &&
+
               <li className="nav__dropdown-item">
                 <button
                   onClick={this.handleShare}
@@ -310,7 +318,7 @@ class Nav extends React.PureComponent {
                 >
                   Compartilhar
                 </button>
-              </li> }
+              </li>
               { this.props.project.id &&
               <li className="nav__dropdown-item">
                 <button

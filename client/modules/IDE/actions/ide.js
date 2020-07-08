@@ -135,17 +135,24 @@ export function closeNewFolderModal() {
 }
 
 export function showShareModal(projectId, projectName, ownerUsername) {
+ 
   return (dispatch, getState) => {
     const { project, user } = getState();
-    dispatch({
-      type: ActionTypes.SHOW_SHARE_MODAL,
-      payload: {
-        shareModalProjectId: projectId || project.id,
-        shareModalProjectName: projectName || project.name,
-        shareModalProjectUsername: ownerUsername || user.username
-      }
-    });
+    if(!projectId && !project.id){
+      dispatch(showToast(1500));
+      dispatch(setToastText('Salve o projeto antes de compartilhar.'));
+    }else{
+      dispatch({
+        type: ActionTypes.SHOW_SHARE_MODAL,
+        payload: {
+          shareModalProjectId: projectId || project.id,
+          shareModalProjectName: projectName || project.name,
+          shareModalProjectUsername: ownerUsername || user.username || 'guest'
+        }
+      });
+    }
   };
+  
 }
 
 export function closeShareModal() {

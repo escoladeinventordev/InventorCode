@@ -10,7 +10,8 @@ import {
   justOpenedProject,
   resetJustOpenedProject,
   showErrorModal,
-  setPreviousPath
+  setPreviousPath,
+  showShareModal
 } from './ide';
 import { clearState, saveState } from '../../../persistState';
 
@@ -121,16 +122,21 @@ function getSynchedProject(currentState, responseProject) {
   };
 }
 
-export function saveProject(selectedFile = null, autosave = false) {
+export function saveProject(selectedFile = null, autosave = false, anonymous = false, share = false) {
   return (dispatch, getState) => {
     const state = getState();
     if (state.project.isSaving) {
       return Promise.resolve();
     }
     dispatch(startSavingProject());
-    if (state.user.id && state.project.owner && state.project.owner.id !== state.user.id) {
-      return Promise.reject();
+    //console.log("state.user",state.user, state.project, state)
+
+    if(!anonymous){
+      if (state.user.id && state.project.owner && state.project.owner.id !== state.user.id) {
+        return Promise.reject();
+      }
     }
+
     const formParams = Object.assign({}, state.project);
     formParams.files = [...state.files];
     if (selectedFile) {
@@ -138,7 +144,8 @@ export function saveProject(selectedFile = null, autosave = false) {
       fileToUpdate.content = selectedFile.content;
     }
     if (state.project.id) {
-      return axios.put(`${ROOT_URL}/projects/${state.project.id}`, formParams, { withCredentials: true })
+      let project_id = state.project.id; 
+      return axios.put(`${ROOT_URL}/projects/${project_id}`, formParams, { withCredentials: true })
         .then((response) => {
           dispatch(endSavingProject());
           dispatch(setUnsavedChanges(false));
@@ -154,11 +161,19 @@ export function saveProject(selectedFile = null, autosave = false) {
               dispatch(setToastText('Project saved.'));
               setTimeout(() => dispatch(setToastText('Autosave enabled.')), 1500);
               dispatch(resetJustOpenedProject());
+              if(share){
+                let username = 'guest';
+                if(!anonymous){
+                  username = state.user.username;
+                }
+                dispatch(showShareModal(state.project.id,state.project.name,username));
+              }
             } else {
               dispatch(showToast(1500));
               dispatch(setToastText('Project saved.'));
             }
           }
+
         })
         .catch((response) => {
           dispatch(endSavingProject());
@@ -193,6 +208,15 @@ export function saveProject(selectedFile = null, autosave = false) {
             dispatch(setToastText('Project saved.'));
             setTimeout(() => dispatch(setToastText('Autosave enabled.')), 1500);
             dispatch(resetJustOpenedProject());
+
+            if(share){
+              let username = 'guest';
+              if(!anonymous){
+                username = state.user.username;
+              }
+              dispatch(showShareModal(state.project.id,state.project.name,username));
+            }
+            
           } else {
             dispatch(showToast(1500));
             dispatch(setToastText('Project saved.'));

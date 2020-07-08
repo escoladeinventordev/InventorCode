@@ -84,6 +84,17 @@ userSchema.statics.findByMailOrName = function findByMailOrName(email) {
   return this.findOne(query).exec();
 };
 
+userSchema.statics.findGuest = function findGuest(onSuccess) {
+  const query = {
+    guest: true,
+  };
+  return this.findOne(query,  (err, user) => {
+    onSuccess(err,user);
+  })
+};
+
+
+
 userSchema.statics.EmailConfirmation = EmailConfirmationStates;
 
 export default mongoose.model('User', userSchema);

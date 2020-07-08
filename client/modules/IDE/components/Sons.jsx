@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import InlineSVG from 'react-inlinesvg';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router';
@@ -37,19 +37,6 @@ const getFileName = (name) => {
 const audios = importAll(require.context('./sound', false, /\.(mp3|wav|ogg)$/));
 let audios_ref = {};
 
-let pagina = 0;
-let por_pagina = 16;
-let total_paginas = Math.ceil(Object.keys(images) / por_pagina);
-
-const proximaPagina = (p) => {
-  console.log('proximaPagina',p);
-  pagina = p+1;
-}
-
-const paginaAnterior = (p) => {
-  pagina = p-1;
-}
-
 const copyToClipboard = (text) => {
   const el = document.createElement('textarea');
   el.value = text;
@@ -60,14 +47,45 @@ const copyToClipboard = (text) => {
 }
 
 function Sons(props) {
-  console.log("audios>>>>>>>>",audios);
+
+  const [pagina, setPagina] = useState(0);
+  const [busca,setBusca] = useState('');
+
+  function escapeRegex(string) {
+    return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  }
+
+  let filtered = audios;
+  if(busca != ''){
+    filtered = {};
+    for(let i in audios){
+      if(i.match(new RegExp(escapeRegex(busca), 'g'))){
+        filtered[i] = audios[i];
+      }
+    }
+  }
+
+  let por_pagina = 16;
+  let total_paginas = Math.ceil(Object.keys(filtered).length / por_pagina);
+
+  const proximaPagina = (p) => {
+    if(pagina <= total_paginas-2 && total_paginas > 1){
+      setPagina(p+2);
+    }
+  }
+
+  const paginaAnterior = (p) => {
+    if(pagina > 0){
+      setPagina(p-2);
+    }
+  }
 
   let audioList = () => {
-    let retorno = <div>Nenhuma imagem disponível</div>
+    let retorno = <div></div>
 
-    if(Object.keys(audios).length > 0){
-      let list = [];
-      for(let i in audios){
+    let list = [];
+    if(Object.keys(filtered).length > 0){
+      for(let i in filtered){
         list.push(
           <div className="box" key={"image_"+i}>
             <div style={{width:100,height:100,overflow:'hidden'}}>
@@ -81,28 +99,31 @@ function Sons(props) {
                 <img src={audioUrl} style={{width:80,height:80}}/>
               </button>
               <ReactAudioPlayer
-                  src={audios[i]}
+                  src={filtered[i]}
                   ref={(element) => { audios_ref[i] = element }}
-                  
               />
             </div>
             <p onClick={() => {copyToClipboard(getFileName(i))}} style={{cursor:'pointer'}}>{getFileName(i)}</p>
           </div>
         )
       }
+    }
 
-      let pp = por_pagina/2;
-      let p1 = list.slice(pp*pagina,pp*(pagina+1));
-      let p2 = list.slice(pp*(pagina+1),pp*(pagina+2));
-      console.log('p2',p2);
+    let pp = por_pagina/2;
+    let p1 = list.slice(pp*pagina,pp*(pagina+1));
+    let p2 = list.slice(pp*(pagina+1),pp*(pagina+2));
 
-      retorno = <div className="book-content">
+    if(Object.keys(filtered).length <= 0){
+      p1 = <div>Nenhum áudio encontrado</div>
+    }
+
+    retorno = <div className="book-content">
       <div className="w50">
         <div className="search d-flex a-center">
-          <input type="text" placeholder="Buscar" />
-          <button className="btn-search">
-            <InlineSVG src={searchUrl} alt="" />
-          </button>
+         <input type="text" placeholder="Buscar" value={busca} onChange={(event) => {
+            setBusca(event.target.value);
+            setPagina(0);
+          }}/>
         </div>
         <div className="list">
           {p1}
@@ -119,7 +140,7 @@ function Sons(props) {
         </div>
       </div>
     </div> 
-    }
+    
     return retorno;
   }
 
