@@ -32,7 +32,7 @@ const getFileName = (name) => {
   return split.join(".");
 }
 
-const images = importAll(require.context('./background', false, /\.(png|jpe?g|svg|gif)$/));
+const images = importAll(require.context('./background', false, /\.(png|jpe?g|svg)$/));
 
 
 
