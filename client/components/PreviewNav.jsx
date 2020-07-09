@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import InlineSVG from 'react-inlinesvg';
 
-const logoUrl = require('../images/p5js-logo-small.svg');
+const logoUrl = require('../images/new2/logo.svg');
 const editorUrl = require('../images/code.svg');
 
 const PreviewNav = ({ owner, project }) => (
