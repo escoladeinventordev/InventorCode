@@ -36,7 +36,7 @@ class NewPasswordView extends React.Component {
     return (
       <div className={newPasswordClass}>
         <Helmet>
-          <title>Editor da Escola de Inventor New Password</title>
+          <title>InventorBox New Password</title>
         </Helmet>
         <div className="form-container__header">
           <button className="form-container__logo-button" onClick={this.gotoHomePage}>

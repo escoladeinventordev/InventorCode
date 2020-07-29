@@ -197,7 +197,7 @@ class IDEView extends React.Component {
     return (
       <div className="ide">
         <Helmet>
-          <title>Editor da Escola de Inventor</title>
+          <title>InventorBox</title>
         </Helmet>
         {this.props.toast.isVisible && <Toast />}
         <Nav

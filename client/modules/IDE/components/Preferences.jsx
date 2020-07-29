@@ -94,7 +94,7 @@ class Preferences extends React.Component {
     return (
       <section className="preferences" title="preference-menu">
         <Helmet>
-          <title>Editor da Escola de Inventor Preferences</title>
+          <title>InventorBox Preferences</title>
         </Helmet>
         <Tabs>
           <TabList>

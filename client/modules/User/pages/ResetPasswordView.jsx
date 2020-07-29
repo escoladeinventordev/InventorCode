@@ -37,7 +37,7 @@ class ResetPasswordView extends React.Component {
     return (
       <div className={resetPasswordClass}>
         <Helmet>
-          <title>Editor da Escola de Inventor Reset Password</title>
+          <title>InventorBox Reset Password</title>
         </Helmet>
         <div className="form-container__header">
           <button className="form-container__logo-button" onClick={this.gotoHomePage}>

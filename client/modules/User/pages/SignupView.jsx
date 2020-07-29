@@ -36,7 +36,7 @@ class SignupView extends React.Component {
     return (
       <div className="form-container">
         <Helmet>
-          <title>Editor da Escola de Inventor Signup</title>
+          <title>InventorBox Signup</title>
         </Helmet>
         <div className="form-container__header">
           <button className="form-container__logo-button" onClick={this.gotoHomePage}>

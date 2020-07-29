@@ -34,7 +34,7 @@ class AccountView extends React.Component {
     return (
       <div className="form-container">
         <Helmet>
-          <title>Editor da Escola de Inventor Account</title>
+          <title>InventorBox Account</title>
         </Helmet>
         <div className="form-container__header">
           <button className="form-container__logo-button" onClick={this.gotoHomePage}>

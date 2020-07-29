@@ -11,7 +11,7 @@ function About(props) {
   return (
     <div className="about__content">
       <Helmet>
-        <title>Editor da Escola de Inventor About</title>
+        <title>InventorBox About</title>
       </Helmet>
       <div className="about__content-column">
         <InlineSVG className="about__logo" src={squareLogoUrl} alt="p5js Square Logo" />
