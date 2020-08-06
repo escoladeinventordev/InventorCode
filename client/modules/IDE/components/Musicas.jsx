@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import InlineSVG from 'react-inlinesvg';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router';
+import ReactAudioPlayer from 'react-audio-player';
+
 
 const elementosUrl = require('../../../images/elementosicon.svg');
 // const playUrl = require('../../../images/play.svg');
@@ -14,12 +16,11 @@ const tlogoUrl = require('../../../images/new/t-logo.svg');
 const musicaUrl = require('../../../images/new/t-musica.svg');
 const searchUrl = require('../../../images/new/search.svg');
 const sonsUrl = require('../../../images/new/sons.svg');
-const musicasUrl = require('../../../images/new/musica.svg');
 const copyUrl = require('../../../images/new/copy.svg');
 const bugUrl = require('../../../images/new/bug.svg');
 
 
-//const images = [(asteriskUrl), (elementosUrl),];
+const images = [(asteriskUrl), (elementosUrl),];
 
 function importAll(r) {
   let images = {};
@@ -33,23 +34,33 @@ const getFileName = (name) => {
   return split.join(".");
 }
 
-const images = importAll(require.context('./images', false, /\.(png|jpe?g|svg)$/));
+const audios = importAll(require.context('./music', false, /\.(mp3|wav|ogg)$/));
+let audios_ref = {};
 
-function Personagens(props) {
+const copyToClipboard = (text) => {
+  const el = document.createElement('textarea');
+  el.value = text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+}
+
+function Musicas(props) {
+
+  const [pagina, setPagina] = useState(0);
+  const [busca,setBusca] = useState('');
 
   function escapeRegex(string) {
     return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
   }
 
-  const [pagina, setPagina] = useState(0);
-  const [busca,setBusca] = useState('');
-
-  let filtered = images;
+  let filtered = audios;
   if(busca != ''){
     filtered = {};
-    for(let i in images){
+    for(let i in audios){
       if(i.match(new RegExp(escapeRegex(busca), 'g'))){
-        filtered[i] = images[i];
+        filtered[i] = audios[i];
       }
     }
   }
@@ -69,22 +80,32 @@ function Personagens(props) {
     }
   }
 
-  
-
-  let imageList = () => {
-    let retorno = <div></div>;
+  let audioList = () => {
+    let retorno = <div></div>
 
     let list = [];
     if(Object.keys(filtered).length > 0){
-      
       for(let i in filtered){
         list.push(
-          <div className="box" key={"image_"+i} onClick={() => {copyToClipboard(getFileName(i))}} style={{cursor:'pointer'}}>
-            <img src={filtered[i]} alt={i} style={{width:100,height:100}} />
-            <p>{getFileName(i)}</p>
+          <div className="box" key={"image_"+i}>
+            <div style={{width:100,height:100,overflow:'hidden'}}>
+              <button onClick={() => {
+                if(audios_ref[i] && audios_ref[i] != null){
+                  if(audios_ref[i].audioEl.current){
+                    audios_ref[i].audioEl.current.play();
+                  }
+                }
+              }}>
+                <img src={audioUrl} style={{width:80,height:80}}/>
+              </button>
+              <ReactAudioPlayer
+                  src={filtered[i]}
+                  ref={(element) => { audios_ref[i] = element }}
+              />
+            </div>
+            <p onClick={() => {copyToClipboard(getFileName(i))}} style={{cursor:'pointer'}}>{getFileName(i)}</p>
           </div>
         )
-        
       }
     }
 
@@ -93,13 +114,13 @@ function Personagens(props) {
     let p2 = list.slice(pp*(pagina+1),pp*(pagina+2));
 
     if(Object.keys(filtered).length <= 0){
-      p1 = <div>Nenhuma imagem encontrada</div>
+      p1 = <div>Nenhum áudio encontrado</div>
     }
 
     retorno = <div className="book-content">
       <div className="w50">
         <div className="search d-flex a-center">
-          <input type="text" placeholder="Buscar" value={busca} onChange={(event) => {
+         <input type="text" placeholder="Buscar" value={busca} onChange={(event) => {
             setBusca(event.target.value);
             setPagina(0);
           }}/>
@@ -123,51 +144,43 @@ function Personagens(props) {
     return retorno;
   }
 
-  const copyToClipboard = (text) => {
-    const el = document.createElement('textarea');
-    el.value = text;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-  }
-
   return (
     <div className="bg-black">
-        
     <div className="book">
       <div className="book-tabs">
-        <div className="tab active">
-        <Link to="/personagens"><span>Personagens</span></Link>
+        <div className="tab">
+        <Link to="/personagens"><span>Personagens</span></Link>             
           <InlineSVG src={tlogoUrl} alt="" />
         </div>
         <div className="tab">
         <Link to="/fundos"><span>Fundos</span></Link>
           <InlineSVG src={imagesUrl} alt="" />
         </div>
-        <div className="tab">
+        <div className="tab active">
         <Link to="/musicas"><span>Musicas</span></Link>
           <InlineSVG src={corUrl} alt="" />
         </div>
-        <div className="tab">
-        <Link to="/sons"><span>Sons</span></Link>
+        <div className="tabdn">
+          <span>Músicas</span>
           <InlineSVG src={audioUrl} alt="" />
         </div>
-        <div className="tabdn">
+        <div className="tab">
           <span>Sons</span>
           <InlineSVG src={musicaUrl} alt="" />
         </div>
         <div className="tabdn">
           <span>Comandos</span>
           <InlineSVG src={codeUrl} alt="" />
-        </div> 
-      </div>
-      {imageList()}
+        </div>
+      </div>  
+
+      {audioList()}
 
     </div>
+
   </div>
 
   );
 }
 
-export default Personagens;
+export default Musicas;

@@ -156,8 +156,8 @@ function Sons(props) {
         <Link to="/fundos"><span>Fundos</span></Link>
           <InlineSVG src={imagesUrl} alt="" />
         </div>
-        <div className="tabdn">
-          <span>Tab 3</span>
+        <div className="tab">
+        <Link to="/musicas"><span>Musicas</span></Link>
           <InlineSVG src={corUrl} alt="" />
         </div>
         <div className="tabdn">

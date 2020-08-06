@@ -527,7 +527,7 @@ class Nav extends React.PureComponent {
               <InlineSVG className="nav__item-header-triangle" src={ajudaURL} />
             </button>
             <ul className="nav__dropdown">
-              <li className="nav__dropdown-item">
+             {/**  <li className="nav__dropdown-item">
                 <button
                   onFocus={this.handleFocusForHelp}
                   onBlur={this.handleBlur}
@@ -535,17 +535,15 @@ class Nav extends React.PureComponent {
                 >
                   Atalhos de Teclado
                 </button>
-              </li>
+              </li>*/}
               <li className="nav__dropdown-item">
-                <a
-                  href="http://referencia.escoladeinventor.com.br/index.html"
-                  target="_blank"
-                  rel="noopener noreferrer"
+              <button
                   onFocus={this.handleFocusForHelp}
                   onBlur={this.handleBlur}
-                  onClick={this.setDropdownForNone}
-                >Referência
-                </a>
+                  onClick={this.handleKeyboardShortcuts}
+                >
+                 Comandos
+                </button>
               </li>
               <li className="nav__dropdown-item">
                 <Link
@@ -554,10 +552,10 @@ class Nav extends React.PureComponent {
                   onBlur={this.handleBlur}
                   onClick={this.setDropdownForNone}
                 >
-                  Sobre nós
+                  Conheça a InventorBox
                 </Link>
               </li>
-              <li className="nav__dropdown-item">
+           {/**    <li className="nav__dropdown-item">
                 <Link
                   to="https://www.hostinger.com.br/tutoriais/o-que-e-javascript/"
                   target="_blank"
@@ -567,7 +565,7 @@ class Nav extends React.PureComponent {
                   onClick={this.setDropdownForNone}
                 >O que é JavaScript?
                 </Link>
-              </li>
+              </li> */}
               
             </ul>
           </li>
