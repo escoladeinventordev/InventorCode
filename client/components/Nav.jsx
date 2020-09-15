@@ -278,10 +278,11 @@ class Nav extends React.PureComponent {
             </button>
             <ul className="nav__dropdown">
               <li className="nav__dropdown-item">
-                <button
+                <button 
                   onClick={this.handleNew}
                   onFocus={this.handleFocusForFile}
                   onBlur={this.handleBlur}
+                  className = 'menu1'
                 >
                   Novo
                 </button>
@@ -292,6 +293,7 @@ class Nav extends React.PureComponent {
                   onClick={this.handleSave}
                   onFocus={this.handleFocusForFile}
                   onBlur={this.handleBlur}
+                  className='menu1'
                 >
                   Salvar
                   <span className="nav__keyboard-shortcut">{metaKeyName}+s</span>
@@ -541,8 +543,9 @@ class Nav extends React.PureComponent {
                   onFocus={this.handleFocusForHelp}
                   onBlur={this.handleBlur}
                   onClick={this.handleKeyboardShortcuts}
+                  className='menu1'
                 >
-                 Comandos
+                  Comandos
                 </button>
               </li>
               <li className="nav__dropdown-item">

@@ -80,8 +80,9 @@ function Personagens(props) {
       for(let i in filtered){
         list.push(
           <div className="box" key={"image_"+i} onClick={() => {copyToClipboard(getFileName(i))}} style={{cursor:'pointer'}}>
+            <center>
             <img src={filtered[i]} alt={i} style={{width:100,height:100}} />
-            <p>{getFileName(i)}</p>
+            <p>{getFileName(i)}</p></center>
           </div>
         )
         
