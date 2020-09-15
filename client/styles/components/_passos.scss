@@ -403,10 +403,12 @@ $color-white     : #FFFFFF; //Branco
 
 			.box{
 				margin-bottom: 20px;
+				//margin: -12px 0 0 -12px;
 
 				img{
 					border-radius: 8px;
 					max-width: 100px;
+					//margin-left: -10px;
 				}
 
 				p{
@@ -414,7 +416,7 @@ $color-white     : #FFFFFF; //Branco
 					color: $color-secundary;
 					font-weight: 700;
 					text-align: center;
-					font-size: 15px;
+					font-size: 11px;
 				}
 			}
 		}

@@ -54,7 +54,7 @@ function Personagens(props) {
     }
   }
 
-  let por_pagina = 16;
+  let por_pagina = 24;
   let total_paginas = Math.ceil(Object.keys(filtered).length / por_pagina);
 
   const proximaPagina = (p) => {
