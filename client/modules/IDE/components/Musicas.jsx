@@ -157,16 +157,16 @@ function Musicas(props) {
           <InlineSVG src={imagesUrl} alt="" />
         </div>
         <div className="tab active">
-        <Link to="/musicas"><span>Musicas</span></Link>
+        <Link to="/musicas"><span>Músicas</span></Link>
           <InlineSVG src={corUrl} alt="" />
         </div>
         <div className="tabdn">
-          <span>Músicas</span>
+          <span>Sons</span>
           <InlineSVG src={audioUrl} alt="" />
         </div>
         <div className="tab">
-          <span>Sons</span>
-          <InlineSVG src={musicaUrl} alt="" />
+        <Link to="/sons"><span>Sons</span></Link>
+          <InlineSVG src={audioUrl} alt="" />
         </div>
         <div className="tabdn">
           <span>Comandos</span>
