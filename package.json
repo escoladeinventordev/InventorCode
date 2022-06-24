@@ -129,7 +129,7 @@
     "is-url": "^1.2.4",
     "jest-express": "^1.10.1",
     "js-beautify": "^1.10.2",
-    "jsdom": "^9.8.3",
+    "jsdom": "^16.5.0",
     "jshint": "^2.10.1",
     "lodash": "^4.17.15",
     "loop-protect": "github:catarak/loop-protect",
